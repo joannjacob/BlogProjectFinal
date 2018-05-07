@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table align="center">
+    <tr>
+        <th><a href="/add_blog">ADD BLOG</a></th></tr>
+    <tr>
+        <th><a href="/my_blogs">MY BLOGS</a></th>
+    </tr>
+
+    <tr>
+        <th><a href="/all_blogs">ALL BLOGS</a></th>
+    </tr>
+
+    <tr>
+        <th><a href="chatroom_options.html">CHAT ROOM</a></th>
+    </tr>
+    <tr>
+        <th><a href="/notification/{{request.user.id}}" id="notification">NOTIFICATIONS</a></th>
+    </tr>
+    <tr>
+        <th><a href="/login">LOGOUT</a></th>
+    </tr>
+</table>
+</body>
+<script>
+    document.querySelector('#notification').focus();
+    document.querySelector('#notification').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#notification').click();
+        }
+    };
+
+    document.querySelector('#notification').onclick = function(e) {
+         window.location.pathname = '/notification/';
+    };
+</script>
+</html>

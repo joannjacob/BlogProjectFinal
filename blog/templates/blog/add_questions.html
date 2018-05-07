@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for ans in all_a %}
+{% for que in all_q %}
+{% if ans.qid == que %}
+Q: {{ que.question }}<br>
+A: {{ ans.answer }}<br><br>
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+
+{% for ans in all_a %}
+{% for que in all_q %}
+{% if ans.qid != que %}
+Q: {{ que.question }}<br>
+<table>
+        {% if flag %}
+        <form action="{{que.id}}/add_answers" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <tr>
+                <th><textarea name="answer"></textarea></th>
+                <th colspan="2"><button type="submit">Reply</button></th>
+            </tr>
+        </form>
+        {% endif %}
+    </table>
+<br><br>
+{% endif %}
+{% endfor %}
+{% endfor %}
+<br>
+<table>
+    {% if not flag %}
+    <form action="add_questions" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <tr>
+            <th>Ask your question</th>
+            <th><textarea name="question"></textarea></th>
+            <th colspan="2"><button type="submit">Submit</button></th>
+        </tr>
+    </form>
+    {% endif %}
+</table>
+</body>
+</html>
+</body>
+</html>

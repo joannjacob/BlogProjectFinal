@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table align="center">
+<form action="myblog_editupdate" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+    <br>
+    <tr>
+        <th><label>Content</label></th>
+        <th><label id="blog-id">{{all_blogs.id}}</label></th>
+        <th><textarea rows="4" cols="50" contenteditable="true" name="edittedblog">{{all_blogs.content}}</textarea></th>
+        <th colspan="2"><button type="submit">Edit </button> </th>
+    </tr>
+</form>
+    <tr>
+        <th>
+            {% if flag %}
+                <a href="#" style="color:red"> Liked </a>
+            {% else %}
+                <a href="like" > Like </a>
+            {% endif %}
+        </th>
+        <th>
+            <a href="view_questions" > View Questions </a>
+        </th>
+
+    </tr>
+    <tr>
+        <br>
+        <table align="center">
+            <form action="add_comment" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <th>
+                    <th>POST A COMMENT</th>
+                    <th><textarea name="comment" id="comment-id"></textarea></th>
+                <th colspan="2"><button type="submit" id="comment-submit">Add Comment</button></th>
+                </tr>
+            </form>
+        </table>
+    </tr>
+    <tr>
+        <table align="center">
+            {% for item in all_comments %}
+            <tr>
+                <th></th>
+                <th><label>{{item.comment}}</label></th>
+            </tr>
+            {% endfor %}
+        </table>
+    </tr>
+
+
+</table>
+</body>
+
+<script>
+
+    var chatSocket = new WebSocket('ws://' + window.location.host +'/ws/notification/ + (all_blogs.user) + '/');
+
+    <!--chatSocket.onmessage = function(e) {-->
+        <!--var data = JSON.parse(e.data);-->
+        <!--var message = data['message'];-->
+        <!--document.querySelector('#chat-log').value += (message + '\n');-->
+    <!--};-->
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#comment-id').focus();
+    document.querySelector('#comment-id').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#comment-submit').click();
+        }
+    };
+
+    document.querySelector('#comment-submit').onclick = function(e) {
+        var commentInputDom = document.querySelector('#comment-id');
+        var comment = commentInputDom.value;
+        var blogInputDom = document.querySelector('#blog-id');
+        var blogid = blogInputDom.value;
+        var userid=all_blogs.user
+
+        chatSocket.send(JSON.stringify({
+            'comment':comment
+            'blogid':blogid
+            'userid':userid
+
+        }));
+
+        commentInputDom.value = '';
+    };
+</script>
+</html>

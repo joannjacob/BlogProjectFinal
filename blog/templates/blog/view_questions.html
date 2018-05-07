@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    {% for que in all_q %}
+    <tr>{{que.question}}</tr>
+
+    <tr>
+        <table>
+            {% for ans in all_a %}
+            {% if ans.question == que.id %}
+            <tr>{{ans.answer}}</tr>
+            {% endif %}
+            {% endfor %}
+            <form action="{{que.id}}/add_answers" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <tr>
+                    <th><textarea name="answer"></textarea></th>
+                    <th colspan="2"><button type="submit">Reply</button></th>
+                </tr>
+            </form>
+        </table>
+    </tr>
+
+    {% endfor %}
+
+</table>
+</body>
+</html>

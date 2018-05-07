@@ -1,0 +1,31 @@
+
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<h1 style="background:darkgray">InApp</h1>
+<title>Helloworld</title>
+</head>
+<body>
+<main>
+<center>
+<h2>Login</h2><form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Login</button><br>
+<a href="/forgot">Forgot Password?</a>
+</form>
+</main>
+</body>
+</html>
+-->
+
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+  <a href="forgot_password">Forgot password</a>
+</form>

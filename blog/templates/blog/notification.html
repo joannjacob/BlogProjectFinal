@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <textarea id="notification" cols="100" rows="20"></textarea><br/>
+    <label>{{user_id}}</label>
+    <table>
+    {% for notif in notifications %}
+            <tr>
+                <th>
+                    {% if notif.like == NULL %}
+                    <a href="/{{notif.blog_id}}/" style="color:blue">{{notif.sender}} posted a comment on your blog</a>
+                    {% else %}
+                    <a href="/{{notif.blog_id}}/" style="color:red">{{notif.sender}}liked your blog</a>
+                    {% endif %}
+                </th>
+            </tr>
+    {% endfor %}
+    </table>
+    <!--<input id="chat-message-input" type="text" size="100"/><br/>-->
+    <!--<input id="chat-message-submit" type="button" value="Send"/>-->
+</body>
+<script>
+
+    var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/' + {{user_id}} + '/');
+
+    chatSocket.onmessage = function(e) {
+    alert('got msg');
+        var data = JSON.parse(e.data);
+        var comment = data['comment'];
+        var blogid = data['blogid'];
+        var userid = data['userid'];
+
+        document.querySelector('#notification').value += (userid + "commented" +comment+ "on your blog" +blogid+ '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+
+</script>
+</html>

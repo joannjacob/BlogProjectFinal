@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        var values = $('#tagselect_id').val();
+    </script>
+</head>
+<body>
+<form action="add_blogentry" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <table align="center">
+        <tr>
+            <th>Title</th>
+            <th><input type="text" name="title"></th>
+        </tr>
+        <tr>
+            <th>Content</th>
+            <th><textarea name="content" rows="4" cols="50"></textarea> </th>
+        </tr>
+
+        <tr>
+            <th>Add Tags</th>
+            {% for tags in tags %}
+            <th>
+                <input type="checkbox" name="tags" id="option{{tags.id}}" value={{tags.tag}}>
+                <label for="option{{tags.id}}">{{tags.tag}}</label><br>
+            </th>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th><button type="submit" id="button">Submit</button></th>
+        </tr>
+
+    </table>
+    </form>
+</body>
+</html>
+
+
+

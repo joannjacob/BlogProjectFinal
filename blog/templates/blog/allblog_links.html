@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function ajaxfunc(){
+        var value="";
+        var a=document.getElementsByName("tags");
+
+        for(i=0;i<a.length;i++)
+        {
+                if(a[i].checked)
+                     value=value+a[i].id+",";
+        }
+        <!--alert(value);-->
+        $.ajax({
+           url: '/all_blogs',
+           method: 'GET',
+           data : {
+             'tag': value
+           },
+           dataType: 'json',
+           success: function (data) {
+           if (data.blogs){
+                <!--alert("success");-->
+                <!--$("all_blogs").replacewith(data.blogs);-->
+                <!--document.getElementById("display2").innerHTML="hello";-->
+
+                var htmlcode="";
+                for(var i=0;i<data.blogs.length;i++)
+                {
+                   <!--alert(data.blogs[i]["title"]);-->
+                   htmlcode+="<tr><th><a href="+data.blogs[i]["id"]+"/all>"+data.blogs[i]["title"]+"</a></th></tr>";
+
+                }
+
+                <!--alert(htmlcode);-->
+                $('#display1').html(htmlcode);
+                 $("#display2").hide();
+            }
+           },
+
+           error: function(xhr, errmsg, err){
+            alert("error");
+           },
+       });
+    }
+
+
+    </script>
+</head>
+<body>
+<div>
+<table>
+    <form action="filter" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <tr>
+            <th>Filter</th>
+            {% for tags in tags %}
+            <th>
+                <input type="checkbox" onclick="ajaxfunc()" class="tags" name="tags" id="{{tags.id}}" (change)="changeVal()" value={{tags.tag}} >
+                <label for="{{tags.id}}">{{tags.tag}}</label><br>
+            </th>
+            {% endfor %}
+            <!--<th><button id="filterbutton" onclick="getvalue()"> Submit </button></th>-->
+        </tr>
+    </form>
+    <tr><td>
+    <div id="display1"></div>
+    </td>
+    </tr>
+    <tr><td>
+    <div id="display2" class="display2">
+    <table>
+    {% for content in all_blogs %}
+            <tr>
+                <th>
+                    {% if userflag == content.user %}
+                    <a href="{{content.id}}/all" style="color:blue">{{content.content}}</a>
+                    {% else %}
+                    <a href="{{content.id}}/all" style="color:red">{{content.content}}</a>
+                    {% endif %}
+                </th>
+            </tr>
+    {% endfor %}
+    </table>
+    </div>
+    </td>
+    </tr>
+    <!--{% for content in a %}-->
+            <!--<tr>-->
+                <!--<th>{{a}}-->
+                <!--</th>-->
+            <!--</tr>-->
+    <!--{% endfor %}-->
+
+</table>
+</div>
+</body>
+</html>

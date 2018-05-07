@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<form action="/user"method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+
+<table align="center">
+    <tr>
+      <th colspan="2">LOGIN</a></th>
+    </tr>
+
+    <tr>
+      <th><label>Username </label></th>
+      <th><input type="text" name="username"></th>
+    </tr>
+    <tr>
+      <th><label>Password</label></th>
+      <th><input type="password" name="password"></th>
+    </tr>
+    <tr>
+      <th colspan="2"><button type="submit">Submit</button></th>
+    </tr>
+    <tr>
+      <th colspan="2"><a href="forgot_password">Forgot password</a></th>
+    </tr>
+
+  </table>
+  </form>
+{% endblock %}
