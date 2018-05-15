@@ -4,7 +4,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from .models import Users, Blog, Like, Comment,Tag,Question,Answer,Notifications
+from .models import Users, Blog, Like, Comment,Tag,Notifications,Question,Answer
 
 from . import serializers
 
@@ -225,6 +225,16 @@ def my_blogs(request):
                 }
                 data = json.dumps(data)
                 return HttpResponse(data,content_type='application/json')
+        # else:
+        #     blogs = Blog.objects.all(user=current_user)
+        #     dictionaries = [obj.as_dict() for obj in blogs]
+        #     print("------------- Blogs " + json.dumps(dictionaries))
+        #
+        #     data = {
+        #         'blogs': dictionaries
+        #     }
+        #     data = json.dumps(data)
+        #     return HttpResponse(data, content_type='application/json')
 
     return render(request, 'blog/myblog_links.html', {'all_blogs': all_contents,'tags': tags})
 
@@ -262,8 +272,9 @@ def myblog_editupdate(request, content_id):
 
 def all_blogs(request):
     all_contents = Blog.objects.all()
-    userflag=request.user
+    userflag = request.user
     tags = Tag.objects.all()
+
     if request.method == 'GET':
         tag=request.GET.get('tag', None)
         # return render(request, 'blog/fail.html')
@@ -281,8 +292,16 @@ def all_blogs(request):
                 }
                 data = json.dumps(data)
                 return HttpResponse(data,content_type='application/json')
-
-                # return render(request, 'blog/allblog_links.html',{'all_blogs': blogs, 'userflag': userflag, 'tags': tags})
+        # else:
+        #     blogs = Blog.objects.all()
+        #     dictionaries = [obj.as_dict() for obj in blogs]
+        #     print("------------- Blogs " + json.dumps(dictionaries))
+        #
+        #     data = {
+        #         'blogs': dictionaries
+        #     }
+        #     data = json.dumps(data)
+        #     return HttpResponse(data, content_type='application/json')
 
 
     return render(request, 'blog/allblog_links.html', {'all_blogs': all_contents,'userflag':userflag,'tags': tags})
@@ -445,15 +464,23 @@ def add_comment(request,content_id):
         else:
             return render(request, 'blog/fail.html')
 
+#
+# def view_questions(request, content_id):
+#     try:
+#         all_questions = Question.objects.filter(blog=content_id)
+#         all_answers = Answer.objects.filter(blog=content_id)
+#
+#         blogobj = Blog.objects.get(id=content_id)
+#         user=request.user
+#         if(user==blogobj.user):
+#             flag=True
+#         else:
+#             flag=False
+#     except Question.DoesNotExist:
+#         raise Http404("Blog doesnt exist")
+#     return render(request, 'blog/view_questions.html',
+#                   {'all_q': all_questions, 'all_a': all_answers,'flag':flag,'data': zip(all_answers, all_questions)})
 
-def view_questions(request, content_id):
-    try:
-        all_questions = Question.objects.filter(blog=content_id)
-        all_answers = Answer.objects.filter(blog=content_id)
-    except Question.DoesNotExist:
-        raise Http404("Blog doesnt exist")
-    return render(request, 'blog/view_questions.html',
-                  {'all_q': all_questions, 'all_a': all_answers})
 
 def add_answers(request, content_id ,que_id):
     if request.method == 'POST':
@@ -467,6 +494,8 @@ def add_answers(request, content_id ,que_id):
             obj.answer=request.POST.get("answer")
             obj.qid=queobj
             obj.save()
+            queobj.ans=True
+            queobj.save()
             return render(request, 'blog/user.html')
         else:
             return render(request, 'blog/fail.html')
@@ -485,8 +514,9 @@ def ask_questions(request, content_id):
             flag=False
     except Question.DoesNotExist:
         raise Http404("Blog doesnt exist")
-    return render(request, 'blog/add_questions.html',
-                  {'all_q': all_questions, 'all_a': all_answers,'flag':flag,'data': zip(all_answers, all_questions)})
+    return render(request, 'blog/add_questions.html',{'all_q': all_questions, 'all_a': all_answers,'flag':flag})
+
+    # 'data': zip(all_answers, all_questions)
 
 def add_questions(request, content_id):
     if request.method == 'POST':

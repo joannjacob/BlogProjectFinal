@@ -81,6 +81,7 @@ class Question(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE,default="")
     blog = models.ForeignKey('Blog',on_delete=models.CASCADE)
     question = models.TextField(max_length=500,default="")
+    ans= models.BooleanField(default=False)
 
 
     def __str__(self):

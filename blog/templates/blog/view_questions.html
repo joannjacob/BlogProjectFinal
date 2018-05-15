@@ -5,30 +5,57 @@
     <title>Title</title>
 </head>
 <body>
-<table>
-    {% for que in all_q %}
-    <tr>{{que.question}}</tr>
 
-    <tr>
-        <table>
-            {% for ans in all_a %}
-            {% if ans.question == que.id %}
-            <tr>{{ans.answer}}</tr>
-            {% endif %}
-            {% endfor %}
-            <form action="{{que.id}}/add_answers" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <tr>
-                    <th><textarea name="answer"></textarea></th>
-                    <th colspan="2"><button type="submit">Reply</button></th>
-                </tr>
-            </form>
-        </table>
-    </tr>
+{% for que in all_q %}
+{% if que.ans %}
+Q: {{ que.question }}<br>
+{% for ans in all_a %}
+{% if ans.qid_id == que.id %}
+A: {{ ans.answer }}<br><br>
+{% endfor %}
+{% else %}
 
-    {% endfor %}
+    <form action="{{que.id}}/add_answers" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-</table>
+        <textarea name="answer"></textarea>
+        <button type="submit">Reply</button>
+
+    </form>
+
+<br><br>
+{% endif %}
+
+{% endfor %}
+
+
+<!--<table>-->
+    <!--{% for que in all_q %}-->
+    <!--<tr>{{que.question}}</tr>-->
+
+    <!--{% if que.ans == True %}-->
+    <!--<tr>-->
+        <!--<table>-->
+            <!--{% for ans in all_a %}-->
+            <!--{% if ans.qid == que.id %}-->
+            <!--<tr>{{ans.answer}}</tr>-->
+            <!--{% endif %}-->
+            <!--{% endfor %}-->
+        <!--</table>-->
+    <!--</tr>-->
+    <!--{% else %}-->
+            <!--<form action="{{que.id}}/add_answers" method="POST">-->
+                <!--{% csrf_token %}-->
+                <!--{{ form.as_p }}-->
+                <!--<tr>-->
+                    <!--<th><textarea name="answer"></textarea></th>-->
+                    <!--<th colspan="2"><button type="submit">Reply</button></th>-->
+                <!--</tr>-->
+            <!--</form>-->
+    <!--{% endif %}-->
+    <!--{% endfor %}-->
+
+<!--</table>-->
 </body>
 </html>

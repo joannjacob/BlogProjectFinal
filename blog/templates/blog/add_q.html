@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    {% for que in all_q %}
+    {{que.ans}}
+    {% if que.ans %}
+    <tr>
+        <td>
+            <th>Q: {{ que.question }}</th>
+    </tr>
+    <tr>
+        {% for ans in all_a %}
+        {% if ans.qid == que.id %}
+        <td>
+        <th>A: {{ ans.answer }}</th>
+        {% endif %}
+        {% endfor %}
+            <th></th>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+</body>
+</html>
